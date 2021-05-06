@@ -1,0 +1,14 @@
+.menu-content {
+  &-logo {
+    height: 50px;
+  }
+
+  &-title {
+    font-size: 40px;
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+}

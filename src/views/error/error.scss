@@ -1,0 +1,29 @@
+.error {
+  display: flex;
+
+  &-logo {
+    display: flex;
+
+    img {
+      height: 80vh;
+    }
+  }
+
+  &-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    &-header {
+      padding: 20px 20px 0 20px;
+    }
+    &-desc {
+      padding: 0 20px 0 20px;
+    }
+
+    .btn {
+      width: fit-content;
+      margin: 50px 20px 20px 20px;
+    }
+  }
+}
