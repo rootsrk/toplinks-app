@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 const app = express();
 const port = 8080;
 const { oauthMethods } = require('./authentication/oauthClient');
-
+require('dotenv').config();
 const COOKIE_NAME = 'oauth_token';
 const consumerKey = process.env.CONSUMER_KEY;
 const consumerSecret = process.env.CONSUMER_SECRET;
@@ -98,6 +98,7 @@ router.post('/getTweetsFromSource', async (req, res) => {
 });
 
 router.get('/checkDBConnection', async (req, res) => {
+  console.log(process.env);
   const rec = await collection.findOne();
   res.json({ rec });
 });
@@ -114,6 +115,7 @@ router.get('/getTweetsForUser', async (req, res) => {
 
 app.use('/', router);
 app.listen(port, async () => {
+  console.log(process.env.DB_PASSWORD);
   await connectToDB();
   console.log(`Server running at http://localhost:${port}`);
 });
