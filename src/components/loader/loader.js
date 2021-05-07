@@ -6,7 +6,7 @@ function Loader() {
     // <div className='loader'>
     //   <img src={tweetLoader} alt='tweets loader' />
     // </div>
-    <div>Loader</div>
+    <div></div>
   );
 }
 
