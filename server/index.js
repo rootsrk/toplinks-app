@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const twitterManager = require('twitter-lite');
 const MongoClient = require('mongodb').MongoClient;
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 const { oauthMethods } = require('./authentication/oauthClient');
 require('dotenv').config();
 const COOKIE_NAME = 'oauth_token';
