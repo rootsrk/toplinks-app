@@ -1,0 +1,84 @@
+.home {
+  margin-top: 86px;
+  &-content {
+    &-trending {
+      min-height: 100vh;
+    }
+    &-tweets {
+      min-height: 100vh;
+      .tweet {
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+    &-stats {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-left: 40px;
+
+      &-title {
+        width: 100%;
+        display: flex;
+        text-align: center;
+
+        &-label {
+          font-size: 36px;
+          padding: 0 20px;
+        }
+      }
+
+      &-count {
+        background-color: red;
+        color: white;
+        font-weight: bolder;
+        padding: 3px;
+        border-radius: 50%;
+        position: relative;
+        left: -15px;
+        top: -10px;
+      }
+
+      &-content {
+        display: flex;
+        justify-content: flex-start;
+        margin: 20px 0;
+        align-items: center;
+
+        &-table {
+          width: 100%;
+          margin: 0 30px;
+          tr {
+            td,
+            th {
+              padding: 5px 20px;
+              text-align: center;
+            }
+          }
+        }
+
+        &-label {
+          font-size: 20px;
+
+          span {
+            font-size: 14px;
+          }
+
+          p {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      &-icon {
+        max-height: 50px;
+        border: 1px solid;
+
+        &.rounded-edges {
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
