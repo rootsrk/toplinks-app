@@ -23,7 +23,7 @@ function Home(props) {
 
   const callGetTweetsEndpoint = async (screen_name) => {
     return await axios
-      .get(`/getTweetsForUser?screen_name=${screen_name}`)
+      .post(`/getTweetsForUser?screen_name=${screen_name}`)
       .then((response) => {
         const {
           data: {

@@ -99,12 +99,12 @@ router.post('/getTweetsFromSource', async (req, res) => {
   res.json({ tweets });
 });
 
-router.get('/checkDBConnection', async (req, res) => {
+router.post('/checkDBConnection', async (req, res) => {
   const rec = await collection.findOne();
   res.json({ rec });
 });
 
-router.get('/getTweetsForUser', async (req, res) => {
+router.post('/getTweetsForUser', async (req, res) => {
   const { screen_name } = req.query;
   const records = await collection.findOne({
     screen_name: {
