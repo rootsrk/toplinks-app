@@ -28,7 +28,7 @@ router.post('/getToken', async (req, res, next) => {
   }
 });
 
-router.post('/authenticateUser', async (req, res) => {
+router.post('/authenticateUser', async (req, res, next) => {
   try {
     const resp = await oauthMethods.getAccessToken(req.body);
     tokens = resp;
@@ -38,7 +38,7 @@ router.post('/authenticateUser', async (req, res) => {
   }
 });
 
-router.post('/getTweetsFromSource', async (req, res) => {
+router.post('/getTweetsFromSource', async (req, res, next) => {
   try {
     const {
       oauth_access_token,
@@ -58,7 +58,7 @@ router.post('/getTweetsFromSource', async (req, res) => {
   }
 });
 
-router.post('/checkDBConnection', async (req, res) => {
+router.post('/checkDBConnection', async (req, res, next) => {
   try {
     const rec = await collection.findOne();
     res.json({ rec });
@@ -67,7 +67,7 @@ router.post('/checkDBConnection', async (req, res) => {
   }
 });
 
-router.post('/getTweetsForUser', async (req, res) => {
+router.post('/getTweetsForUser', async (req, res, next) => {
   try {
     const { screen_name } = req.query;
     const records = await collection.findOne({
