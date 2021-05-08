@@ -21,7 +21,7 @@ app.get('*', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ err });
+  res.status(500).json({ error: err, code: 500 });
 });
 
 app.listen(port, async () => {
