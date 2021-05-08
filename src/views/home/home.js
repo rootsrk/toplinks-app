@@ -169,10 +169,7 @@ function Home(props) {
     toggleFilterInProgress(false);
   };
 
-  const searchFor = (searchTerm) => {
-    const currentTweets = filterInProgress ? filteredTweetsData : tweetsData;
-    const modifiedTweets = currentTweets.forEach((tweet) => {});
-  };
+  const searchFor = (searchTerm) => {};
 
   useEffect(() => {
     runAnalysisOnTweets();
