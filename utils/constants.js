@@ -11,4 +11,4 @@ const constants = {
   method: 'HMAC-SHA1',
 };
 
-export { constants };
+module.exports = constants;

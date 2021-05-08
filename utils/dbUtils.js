@@ -15,4 +15,12 @@ const connectToDB = async () => {
   collection = db.collection('twitterCollection');
 };
 
-export { connectToDB };
+const storeTweets = async ({ screen_name, tweets, user_id }) => {
+  await collection.findOneAndReplace(
+    { screen_name },
+    { screen_name, tweets, user_id },
+    { upsert: true }
+  );
+};
+
+module.exports = { connectToDB, storeTweets };
