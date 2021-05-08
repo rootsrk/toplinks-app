@@ -11,7 +11,7 @@ const COOKIE_NAME = 'oauth_token';
 const consumerKey = process.env.CONSUMER_KEY;
 const consumerSecret = process.env.CONSUMER_SECRET;
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.iyktc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority1`;
-require('dotenv').config();
+
 const path = require('path');
 
 const client = new MongoClient(uri, {
@@ -27,8 +27,6 @@ const connectToDB = async () => {
   collection = db.collection('twitterCollection');
 };
 
-//our in-memory secrets database.
-//Can be a key-value store or a relational database
 let tokens = {};
 
 app.use(bodyParser.json());
@@ -39,7 +37,6 @@ const router = express.Router();
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public', 'index.html'));
 });
-
 router.post('/getToken', async (req, res) => {
   const {
     oauth_token,
@@ -113,6 +110,8 @@ router.get('/getTweetsForUser', async (req, res) => {
   });
   res.json({ records });
 });
+
+app.use('/', router);
 
 app.listen(port, async () => {
   await connectToDB();

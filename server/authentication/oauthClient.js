@@ -18,6 +18,16 @@ const oauth = new oauthClient.OAuth(
   method
 );
 
+console.log(
+  requestTokenUrl,
+  accessTokenUrl,
+  consumerKey,
+  consumerSecret,
+  oauthVersion,
+  oauthCallbackUrl,
+  method
+);
+
 const oauthMethods = {
   getRequestToken: () => {
     return new Promise((resolve, reject) => {
