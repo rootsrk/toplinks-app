@@ -1,11 +1,14 @@
 const oauthClient = require('oauth');
 
-const consumerKey = process.env.CONSUMER_KEY; // 'g9YsqPUpaMIJKF4E4kLGLBMY1',
-const consumerSecret = process.env.CONSUMER_SECRET; //'FwoHc2plS0AX7lBrgCvw639MSqo5LqKYrXifRXIekhZgPXhWaS',
+const consumerKey = process.env.CONSUMER_KEY || 'g9YsqPUpaMIJKF4E4kLGLBMY1'; // 'g9YsqPUpaMIJKF4E4kLGLBMY1',
+const consumerSecret =
+  process.env.CONSUMER_SECRET ||
+  'FwoHc2plS0AX7lBrgCvw639MSqo5LqKYrXifRXIekhZgPXhWaS'; //'FwoHc2plS0AX7lBrgCvw639MSqo5LqKYrXifRXIekhZgPXhWaS',
 const requestTokenUrl = 'https://api.twitter.com/oauth/request_token';
 const accessTokenUrl = 'https://api.twitter.com/oauth/access_token';
 const oauthVersion = '1.0';
-const oauthCallbackUrl = process.env.CALLBACK_URL;
+const oauthCallbackUrl =
+  process.env.CALLBACK_URL || 'http://localhost:5000/authenticate';
 const method = 'HMAC-SHA1';
 
 const oauth = new oauthClient.OAuth(

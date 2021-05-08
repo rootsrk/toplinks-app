@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const twitterManager = require('twitter-lite');
 const MongoClient = require('mongodb').MongoClient;
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 5000;
 const { oauthMethods } = require('./authentication/oauthClient');
 require('dotenv').config();
 const COOKIE_NAME = 'oauth_token';
@@ -34,9 +34,8 @@ app.use(cookieParser());
 
 const router = express.Router();
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public', 'index.html'));
-});
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 router.post('/getToken', async (req, res) => {
   const {
     oauth_token,
@@ -109,6 +108,10 @@ router.get('/getTweetsForUser', async (req, res) => {
     },
   });
   res.json({ records });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
 app.use('/', router);
