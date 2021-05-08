@@ -36,6 +36,10 @@ const router = express.Router();
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
+
 router.post('/getToken', async (req, res) => {
   const {
     oauth_token,
@@ -108,10 +112,6 @@ router.get('/getTweetsForUser', async (req, res) => {
     },
   });
   res.json({ records });
-});
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
 app.use('/', router);
