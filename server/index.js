@@ -11,6 +11,8 @@ const COOKIE_NAME = 'oauth_token';
 const consumerKey = process.env.CONSUMER_KEY;
 const consumerSecret = process.env.CONSUMER_SECRET;
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.iyktc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority1`;
+require('dotenv').config();
+const path = require('path');
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -34,8 +36,8 @@ app.use(cookieParser());
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Hello, world' });
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public', 'index.html'));
 });
 
 router.post('/getToken', async (req, res) => {
@@ -98,7 +100,6 @@ router.post('/getTweetsFromSource', async (req, res) => {
 });
 
 router.get('/checkDBConnection', async (req, res) => {
-  console.log(process.env);
   const rec = await collection.findOne();
   res.json({ rec });
 });
@@ -113,9 +114,7 @@ router.get('/getTweetsForUser', async (req, res) => {
   res.json({ records });
 });
 
-app.use('/', router);
 app.listen(port, async () => {
-  console.log(process.env.DB_PASSWORD);
   await connectToDB();
   console.log(`Server running at http://localhost:${port}`);
 });

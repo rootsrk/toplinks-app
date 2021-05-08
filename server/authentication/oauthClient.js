@@ -5,7 +5,7 @@ const consumerSecret = process.env.CONSUMER_SECRET; //'FwoHc2plS0AX7lBrgCvw639MS
 const requestTokenUrl = 'https://api.twitter.com/oauth/request_token';
 const accessTokenUrl = 'https://api.twitter.com/oauth/access_token';
 const oauthVersion = '1.0';
-const oauthCallbackUrl = 'http://localhost:3000/authenticate';
+const oauthCallbackUrl = process.env.CALLBACK_URL;
 const method = 'HMAC-SHA1';
 
 const oauth = new oauthClient.OAuth(
