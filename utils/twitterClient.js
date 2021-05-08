@@ -3,8 +3,8 @@ const { consumerKey, consumerSecret } = require('./utils/constants');
 
 const getTweets = async ({ oauth_access_token, oauth_access_token_secret }) => {
   const client = new twitterManager({
-    consumer_key: consumerKey, //'g9YsqPUpaMIJKF4E4kLGLBMY1'
-    consumer_secret: consumerSecret, //'FwoHc2plS0AX7lBrgCvw639MSqo5LqKYrXifRXIekhZgPXhWaS'
+    consumer_key: consumerKey,
+    consumer_secret: consumerSecret,
     access_token_key: oauth_access_token,
     access_token_secret: oauth_access_token_secret,
     tweet_mode: 'extended',
