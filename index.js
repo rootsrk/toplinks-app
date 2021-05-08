@@ -1,39 +1,27 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const twitterManager = require('twitter-lite');
-const MongoClient = require('mongodb').MongoClient;
-const app = express();
-const port = process.env.PORT || 5000;
-const { oauthMethods } = require('./authentication/oauthClient');
-require('dotenv').config();
-const COOKIE_NAME = 'oauth_token';
-const consumerKey = process.env.CONSUMER_KEY;
-const consumerSecret = process.env.CONSUMER_SECRET;
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.iyktc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority1`;
-
 const path = require('path');
 
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-let db;
-let collection;
+const { connectToDB } = require('./utils/dbUtils');
+const { oauthMethods } = require('./authentication/oauthClient');
+const {
+  cookieName,
+  consumerKey,
+  consumerSecret,
+} = require('./utils/constants');
 
-const connectToDB = async () => {
-  await client.connect();
-  db = client.db('tweetsData');
-  collection = db.collection('twitterCollection');
-};
+const app = express();
+const router = express.Router();
 
 let tokens = {};
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-
-const router = express.Router();
-
+app.use('/', router);
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('*', (req, res) => {
@@ -86,7 +74,8 @@ router.post('/getTweetsFromSource', async (req, res) => {
       tweet_mode: 'extended',
     });
   } catch (err) {
-    console.log(err);
+    console.log('Error obtaining tweets', err);
+    return err;
   }
   if (tweets.length) {
     await collection.findOneAndReplace(
@@ -96,7 +85,7 @@ router.post('/getTweetsFromSource', async (req, res) => {
     );
   }
 
-  res.json({ tweets });
+  res.json({ tweets, err });
 });
 
 router.post('/checkDBConnection', async (req, res) => {
@@ -113,8 +102,6 @@ router.post('/getTweetsForUser', async (req, res) => {
   });
   res.json({ records });
 });
-
-app.use('/', router);
 
 app.listen(port, async () => {
   await connectToDB();
