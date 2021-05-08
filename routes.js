@@ -3,7 +3,11 @@ const router = express.Router();
 const { oauthMethods } = require('./authentication/oauthClient');
 const { cookieName } = require('./utils/constants');
 
-const { storeTweets } = require('./utils/dbUtils');
+const {
+  storeTweets,
+  getTweetsForUser,
+  checkConnection,
+} = require('./utils/dbUtils');
 
 let tokens = {};
 
@@ -24,6 +28,7 @@ router.post('/getToken', async (req, res, next) => {
     });
     res.json({ oauth_token, results });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
@@ -34,6 +39,7 @@ router.post('/authenticateUser', async (req, res, next) => {
     tokens = resp;
     res.json({ resp });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
@@ -54,15 +60,17 @@ router.post('/getTweetsFromSource', async (req, res, next) => {
 
     res.json({ tweets, err });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
 
 router.post('/checkDBConnection', async (req, res, next) => {
   try {
-    const rec = await collection.findOne();
+    const rec = await checkConnection();
     res.json({ rec });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
@@ -70,13 +78,10 @@ router.post('/checkDBConnection', async (req, res, next) => {
 router.post('/getTweetsForUser', async (req, res, next) => {
   try {
     const { screen_name } = req.query;
-    const records = await collection.findOne({
-      screen_name: {
-        $eq: screen_name,
-      },
-    });
+    const records = await getTweetsForUser(screen_name);
     res.json({ records });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });

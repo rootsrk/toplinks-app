@@ -8,21 +8,49 @@ const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-let db;
-let collection;
+
+let referencedDB;
+let referencedCollection;
 
 const connectToDB = async () => {
-  await client.connect();
-  db = client.db('tweetsData');
-  collection = db.collection('twitterCollection');
+  try {
+    await client.connect();
+    referencedDB = client.db('tweetsData');
+    referencedCollection = referencedDB.collection('twitterCollection');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const storeTweets = async ({ screen_name, tweets, user_id }) => {
-  await collection.findOneAndReplace(
-    { screen_name },
-    { screen_name, tweets, user_id },
-    { upsert: true }
-  );
+  try {
+    await referencedCollection.findOneAndReplace(
+      { screen_name },
+      { screen_name, tweets, user_id },
+      { upsert: true }
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-module.exports = { connectToDB, storeTweets };
+const getTweetsForUser = async (screen_name) => {
+  const tweets = await referencedCollection.findOne({
+    screen_name: {
+      $eq: screen_name,
+    },
+  });
+  return tweets;
+};
+
+const checkConnection = async () => {
+  const result = await referencedCollection.findOne();
+  return result;
+};
+
+module.exports = {
+  connectToDB,
+  storeTweets,
+  getTweetsForUser,
+  checkConnection,
+};
