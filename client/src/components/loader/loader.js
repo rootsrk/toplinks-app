@@ -1,12 +1,11 @@
-// import tweetLoader from '../../assets/loader.svg';
+import tweetLoader from '../../assets/loader.gif';
 import './loader.scss';
 
 function Loader() {
   return (
-    // <div className='loader'>
-    //   <img src={tweetLoader} alt='tweets loader' />
-    // </div>
-    <div></div>
+    <div className='loader'>
+      <img src={tweetLoader} alt='tweets loader' />
+    </div>
   );
 }
 
