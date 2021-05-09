@@ -18,6 +18,7 @@ const getTweets = async ({ oauth_access_token, oauth_access_token_secret }) => {
       count: 200,
       tweet_mode: 'extended',
     });
+    return tweets;
   } catch (err) {
     console.log('Error obtaining tweets', err);
     return err;

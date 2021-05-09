@@ -55,12 +55,12 @@ router.post('/getTweetsFromSource', async (req, res, next) => {
       user_id,
     } = req.body;
 
-    const response = await getTweets({
+    const tweets = await getTweets({
       oauth_access_token,
       oauth_access_token_secret,
     });
-    console.log('response', response);
-    if (response.tweets) {
+    console.log('response', tweets);
+    if (tweets) {
       await storeTweets({ screen_name, tweets, user_id });
     }
 
