@@ -60,13 +60,9 @@ function Views() {
     isUserLoggedIn();
   }, []);
 
-  const isUserLoggedIn = async (returnParam) => {
+  const isUserLoggedIn = async () => {
     var isAuthenticated =
-      Object.keys(JSON.parse(localStorage.getItem('accessTokenData')) || {})
-        .length > 0;
-    if (returnParam) {
-      return isAuthenticated;
-    }
+      JSON.parse(localStorage.getItem('successfulLogin')) || false;
     setAuthenticated(isAuthenticated);
   };
 
@@ -102,15 +98,12 @@ function Views() {
 
             <Route exact path='/home'>
               {isAuthenticated ? <Home /> : <Redirect to='/login' />}
+              {/* {isAuthenticated ? <div>Home</div> : <div>Login</div>} */}
             </Route>
 
-            <Route path='/'>
-              {isAuthenticated ? (
-                <Redirect to='/home' />
-              ) : (
-                <Redirect to='/login' />
-              )}
-            </Route>
+            {/* <Route exact path='/'>
+              {isAuthenticated ? <div>Home</div> : <div>Login</div>}
+            </Route> */}
           </Switch>
         </Router>
       </div>
