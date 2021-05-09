@@ -7,8 +7,10 @@ import Loader from '../../components/loader/loader';
 import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
-import { Redirect } from 'react-router-dom';
+import ErrorComponent from '../../components/errorComponent/errorComponent';
+
 function Home(props) {
+  const { setToastData } = props;
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
   const [screenName, setScreenName] = useState('');
@@ -46,11 +48,20 @@ function Home(props) {
     setScreenName(screen_name);
     let tweets = await callGetTweetsEndpoint(screen_name);
     if (!tweets) {
-      await getTweets(userData).then(async () => {
-        tweets = await callGetTweetsEndpoint(screen_name).then(async () => {
-          storeTweets(tweets);
+      await getTweets(userData)
+        .then(async () => {
+          tweets = await callGetTweetsEndpoint(screen_name).then(async () => {
+            storeTweets(tweets);
+          });
+        })
+        .catch((error) => {
+          toggleLoader(false);
+          setToastData({
+            show: true,
+            message: 'Oops! An error occured. Please try again later!',
+            title: 'Error',
+          });
         });
-      });
     } else {
       storeTweets(tweets);
     }
@@ -187,11 +198,24 @@ function Home(props) {
 
   const getNewTweets = async () => {
     toggleLoader(true);
-    await getTweets(userData).then(async () => {
-      let tweets = await callGetTweetsEndpoint(screenName);
-      storeTweets(tweets);
-    });
+    await getTweets(userData)
+      .then(async () => {
+        let tweets = await callGetTweetsEndpoint(screenName);
+        storeTweets(tweets);
+      })
+      .catch((error) => {
+        toggleLoader(false);
+        setToastData({
+          show: true,
+          message: 'Oops! An error occured. Please try again later!',
+          title: 'Error',
+        });
+      });
     toggleLoader(false);
+  };
+
+  const reload = () => {
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -217,48 +241,52 @@ function Home(props) {
           logout={logout}
           getNewTweets={getNewTweets}
         />
-        <div className='home-content row'>
-          <div className='home-content-trending col-sm-3'>
-            <Filter
-              data={createFilterObject()}
-              applyFilters={applyFilters}
-              clearAllFilters={clearAllFilters}
-            />
-          </div>
-          <div className='home-content-tweets col-sm-6'>
-            {(filterInProgress ? filteredTweetsData : tweetsData).map(
-              (item) => (
-                <div key={item.id}>
-                  <Tweet data={item} />
-                </div>
-              )
-            )}
-          </div>
-          {sortedUserData.length > 0 && (
-            <div className='home-content-stats col-sm-3'>
-              <div className='home-content-stats-title row'>
-                <span className='home-content-stats-title-label'>
-                  Leader board
-                </span>
-              </div>
-              {sortedUserData.map((userData) => (
-                <div key={userData.screen_name}>
-                  <Card userData={userData} />
-                </div>
-              ))}
-              <div className='home-content-trending'>
+        {tweetsData.length > 0 ? (
+          <div className='home-content row'>
+            <div className='home-content-trending col-sm-3'>
+              <Filter
+                data={createFilterObject()}
+                applyFilters={applyFilters}
+                clearAllFilters={clearAllFilters}
+              />
+            </div>
+            <div className='home-content-tweets col-sm-6'>
+              {(filterInProgress ? filteredTweetsData : tweetsData).map(
+                (item) => (
+                  <div key={item.id}>
+                    <Tweet data={item} />
+                  </div>
+                )
+              )}
+            </div>
+            {sortedUserData.length > 0 && (
+              <div className='home-content-stats col-sm-3'>
                 <div className='home-content-stats-title row'>
                   <span className='home-content-stats-title-label'>
-                    What's trending?
+                    Leader board
                   </span>
                 </div>
-                <div className='home-content-stats-content'>
-                  <Table tableData={tableData} />
+                {sortedUserData.map((userData) => (
+                  <div key={userData.screen_name}>
+                    <Card userData={userData} />
+                  </div>
+                ))}
+                <div className='home-content-trending'>
+                  <div className='home-content-stats-title row'>
+                    <span className='home-content-stats-title-label'>
+                      What's trending?
+                    </span>
+                  </div>
+                  <div className='home-content-stats-content'>
+                    <Table tableData={tableData} />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        ) : (
+          <ErrorComponent isPageLevel action={reload} />
+        )}
       </div>
       <Loader isLoading={isLoading} />
     </>

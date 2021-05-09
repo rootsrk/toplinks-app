@@ -33,3 +33,12 @@ div {
   margin: 0;
   padding: 0;
 }
+
+.toast {
+  &.show {
+    position: absolute;
+    z-index: 50;
+    bottom: 30px;
+    right: 30px;
+  }
+}
