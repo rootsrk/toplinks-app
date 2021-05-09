@@ -26,10 +26,9 @@ function Home(props) {
       .post(`/getTweetsForUser?screen_name=${screen_name}`)
       .then((response) => {
         const {
-          data: {
-            records: { tweets },
-          },
+          data: { records },
         } = response;
+        const tweets = records ? records.tweets : null;
         return tweets;
       });
   };
@@ -39,6 +38,7 @@ function Home(props) {
       results: { screen_name },
     } = userData;
     let tweets = await callGetTweetsEndpoint(screen_name);
+    console.log('getTweetsForUser', tweets);
     if (!tweets) {
       getTweets(userData).then(async () => {
         tweets = await callGetTweetsEndpoint(screen_name);

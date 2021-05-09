@@ -80,15 +80,16 @@ router.post('/getTweetsFromSource', async (req, res) => {
   });
   let tweets;
   try {
-    tweets = await client.get('statuses/home_timeline', {
-      exclude_replies: true,
-      count: 200,
-      tweet_mode: 'extended',
-    });
+    tweets =
+      (await client.get('statuses/home_timeline', {
+        exclude_replies: true,
+        count: 200,
+        tweet_mode: 'extended',
+      })) || null;
   } catch (err) {
     console.log(err);
   }
-  if (tweets.length) {
+  if (tweets) {
     await collection.findOneAndReplace(
       { screen_name },
       { screen_name, tweets, user_id },
