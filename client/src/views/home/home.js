@@ -9,8 +9,8 @@ import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
 import { Redirect } from 'react-router-dom';
-function Home(props) {
-  const { isAuthenticated } = props;
+function Home() {
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
   const [screenName, setScreenName] = useState('');
@@ -210,12 +210,15 @@ function Home(props) {
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('accessTokenData'));
-    if (userData) {
+    const successfulLogin =
+      JSON.parse(localStorage.getItem('successfulLogin')) || false;
+    if (successfulLogin && userData) {
+      setAuthenticated(true);
       getTweetsForUser(userData);
     }
   }, []);
 
-  return (
+  return isAuthenticated ? (
     <>
       <div className='home'>
         <MenuBar
@@ -277,6 +280,8 @@ function Home(props) {
       </div>
       <Loader isLoading={isLoading} />
     </>
+  ) : (
+    <Redirect path='/login' />
   );
 }
 
