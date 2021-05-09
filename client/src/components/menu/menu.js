@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { Navbar, Form, FormControl, Button } from 'react-bootstrap';
+import Logout from '../logout/logout';
 import logo from '../../assets/logo.png';
 
 function MenuBar(props) {
+  const {
+    logout = () => {},
+    enableSearch = false,
+    searchFor = () => {},
+  } = props;
   const [searchParam, setSearchParam] = useState('');
 
   const onChange = (e) => {
@@ -18,14 +24,14 @@ function MenuBar(props) {
           <img className='menu-content-logo' src={logo} alt='toplink logo' />
           <h2>TopLinks</h2>
         </Navbar.Brand>
-        {props.enableSearch && (
+        {enableSearch && (
           <Form inline>
             <FormControl type='text' placeholder='Search' onChange={onChange} />
-            <Button onClick={() => props.searchFor(searchParam)}>Search</Button>
+            <Button onClick={() => searchFor(searchParam)}>Search</Button>
           </Form>
         )}
+        <Logout logout={logout} />
       </Navbar>
-      {/* TODO add icon */}
     </div>
   );
 }

@@ -4,18 +4,22 @@ function Table(props) {
   } = props;
   return (
     <table className='home-content-stats-content-table'>
-      <tr>
-        {headers.map((item) => (
-          <th>{item.label}</th>
-        ))}
-      </tr>
-      {data.map((domainData, index) => (
+      <thead>
         <tr>
-          <td>{index + 1}</td>
-          <td>{domainData.domain}</td>
-          <td>{domainData.counter}</td>
+          {headers.map((item) => (
+            <th key={item.label}>{item.label}</th>
+          ))}
         </tr>
-      ))}
+      </thead>
+      <tbody>
+        {data.map((domainData, index) => (
+          <tr key={domainData.domain}>
+            <td>{index + 1}</td>
+            <td>{domainData.domain}</td>
+            <td>{domainData.counter}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 }

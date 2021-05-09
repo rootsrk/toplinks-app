@@ -168,6 +168,11 @@ function Home() {
 
   const searchFor = (searchTerm) => {};
 
+  const logout = () => {
+    localStorage.clear();
+    window.location.href = '/';
+  };
+
   useEffect(() => {
     runAnalysisOnTweets();
   }, [tweetsData]);
@@ -182,7 +187,7 @@ function Home() {
   return (
     <>
       <div className='home'>
-        <MenuBar enableSearch searchFor={searchFor} />
+        <MenuBar enableSearch searchFor={searchFor} logout={logout} />
         <div className='home-content row'>
           <div className='home-content-trending col-sm-3'>
             <Filter
@@ -194,7 +199,9 @@ function Home() {
           <div className='home-content-tweets col-sm-6'>
             {(filterInProgress ? filteredTweetsData : tweetsData).map(
               (item) => (
-                <Tweet data={item} />
+                <div key={item.id}>
+                  <Tweet data={item} />
+                </div>
               )
             )}
           </div>
@@ -205,7 +212,9 @@ function Home() {
               </span>
             </div>
             {sortedUserData.map((userData) => (
-              <Card userData={userData} />
+              <div key={userData.screen_name}>
+                <Card userData={userData} />
+              </div>
             ))}
             <div className='home-content-trending'>
               <div className='home-content-stats-title row'>
