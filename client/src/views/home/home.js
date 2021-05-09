@@ -40,7 +40,7 @@ function Home(props) {
     let tweets = await callGetTweetsEndpoint(screen_name);
     console.log('getTweetsForUser', tweets);
     if (!tweets) {
-      getTweets(userData).then(async () => {
+      await getTweets(userData).then(async () => {
         tweets = await callGetTweetsEndpoint(screen_name);
       });
     }
