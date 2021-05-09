@@ -14,7 +14,7 @@ function Logout(props) {
         />
         <div className='logout-content'>
           <span className='logout-content-userhandle'>@sumo_dev_</span>
-          <span onClick={logout} className='logout-content-button'>
+          <span onClick={() => logout()} className='logout-content-button'>
             Logout
           </span>
         </div>
