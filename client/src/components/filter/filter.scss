@@ -2,7 +2,7 @@
   &-container {
     margin: 0 0 30px 0;
     padding: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid $border-shadow;
     border-radius: 10px;
 
     h3 {
@@ -21,18 +21,18 @@
       padding: 2px 20px;
       margin: 10px 5px 0 0;
       width: auto;
-      border: 1px solid rgba(0, 0, 0, 0.2);
+      border: 1px solid $border-shadow;
       border-radius: 50px;
 
       &:hover {
-        background-color: #1c3b90;
-        color: white;
+        background-color: $base-blue;
+        color: $base-white;
         cursor: pointer;
       }
 
       &.selected {
-        background-color: #1c3b90;
-        color: white;
+        background-color: $base-blue;
+        color: $base-white;
       }
 
       &-container {

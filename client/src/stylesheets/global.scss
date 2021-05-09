@@ -1,5 +1,7 @@
+@import './_variables.scss';
+
 .btn {
   &-primary {
-    background-color: #1c3b90 !important;
+    background-color: $base-blue !important;
   }
 }

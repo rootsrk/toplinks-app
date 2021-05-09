@@ -6,9 +6,9 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    z-index: 9999;
+    z-index: $loader-z-index;
     top: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: $loader-background;
     overflow: auto;
   }
 
