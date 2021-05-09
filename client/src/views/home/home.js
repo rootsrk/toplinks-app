@@ -182,12 +182,7 @@ function Home(props) {
 
   const logout = () => {
     localStorage.clear();
-    window.location.href = '/';
-  };
-
-  const refreshPage = () => {
-    debugger;
-    window.location.reload();
+    window.location.href = '/login';
   };
 
   const getNewTweets = async () => {
