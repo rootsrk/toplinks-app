@@ -1,6 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const { DB_USERNAME, DB_PASSWORD } = require('./constants');
+const {
+  constants: { DB_USERNAME, DB_PASSWORD },
+} = require('./constants');
 
 const uri = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.iyktc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority1`;
 

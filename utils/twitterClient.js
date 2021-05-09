@@ -1,5 +1,7 @@
 const twitterManager = require('twitter-lite');
-const { consumerKey, consumerSecret } = require('./utils/constants');
+const {
+  constants: { consumerKey, consumerSecret },
+} = require('../utils/constants');
 
 const getTweets = async ({ oauth_access_token, oauth_access_token_secret }) => {
   const client = new twitterManager({

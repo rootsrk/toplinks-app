@@ -1,12 +1,14 @@
 const oauthClient = require('oauth');
 const {
-  requestTokenUrl,
-  accessTokenUrl,
-  consumerKey,
-  consumerSecret,
-  oauthVersion,
-  oauthCallbackUrl,
-  method,
+  constants: {
+    requestTokenUrl,
+    accessTokenUrl,
+    consumerKey,
+    consumerSecret,
+    oauthVersion,
+    oauthCallbackUrl,
+    method,
+  },
 } = require('../utils/constants');
 
 const oauth = new oauthClient.OAuth(
