@@ -4,6 +4,16 @@
   &-primary {
     background-color: $base-blue !important;
   }
+
+  &-outline-primary {
+    border-color: $base-blue !important;
+    color: $base-blue !important;
+
+    &:hover {
+      background-color: $base-blue !important;
+      color: $base-white !important;
+    }
+  }
 }
 
 div {

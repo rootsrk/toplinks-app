@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import MenuBar from '../../components/menu/menu';
 import Tweet from '../../components/tweet/tweet';
 import Card from '../../components/card/card';
+import ErrorComponent from '../../components/errorComponent/errorComponent';
 import Filter from '../../components/filter/filter';
 import Loader from '../../components/loader/loader';
 import Table from '../../components/table/table';
@@ -10,7 +11,8 @@ import { sortObjectByKey, constants } from '../../utils/helper';
 function Home() {
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
-
+  const [screenName, setScreenName] = useState('');
+  const [userData, setUserData] = useState('');
   const [sortedUserData, setSortedUserData] = useState([]);
   const [sortedDomainData, setSortedDomainData] = useState([]);
   const [hashtagsData, setHashtagsMap] = useState({});
@@ -28,9 +30,8 @@ function Home() {
     return await post(`/getTweetsForUser?screen_name=${screen_name}`).then(
       (responseData) => {
         const { response } = responseData;
-        const {
-          data: { records },
-        } = response;
+        const { data = {} } = response;
+        const { records } = data;
         const tweets = records ? records.tweets : null;
         return tweets;
       }
@@ -39,17 +40,29 @@ function Home() {
 
   const getTweetsForUser = async (userData) => {
     toggleLoader(true);
+    setUserData(userData);
     const {
       results: { screen_name },
     } = userData;
+    setScreenName(screen_name);
     let tweets = await callGetTweetsEndpoint(screen_name);
     if (!tweets) {
       await getTweets(userData).then(async () => {
-        tweets = await callGetTweetsEndpoint(screen_name);
+        tweets = await callGetTweetsEndpoint(screen_name).then(async () => {
+          storeTweets(tweets);
+        });
       });
+    } else {
+      storeTweets(tweets);
     }
-    setTweets(tweets.filter(({ entities: { urls } }) => urls.length > 0));
+
     toggleLoader(false);
+  };
+
+  const storeTweets = (tweets = []) => {
+    setTweets(
+      (tweets || []).filter(({ entities: { urls } }) => urls.length > 0)
+    );
   };
 
   const runAnalysisOnTweets = () => {
@@ -173,6 +186,22 @@ function Home() {
     window.location.href = '/';
   };
 
+  const refreshPage = () => {
+    debugger;
+    window.location.reload();
+  };
+
+  const getNewTweets = async () => {
+    toggleLoader(true);
+    let tweets = await getTweets(userData).then(async () => {
+      tweets = await callGetTweetsEndpoint(screenName);
+    });
+    setTweets(
+      (tweets || []).filter(({ entities: { urls } }) => urls.length > 0)
+    );
+    toggleLoader(false);
+  };
+
   useEffect(() => {
     runAnalysisOnTweets();
   }, [tweetsData]);
@@ -187,47 +216,62 @@ function Home() {
   return (
     <>
       <div className='home'>
-        <MenuBar enableSearch searchFor={searchFor} logout={logout} />
-        <div className='home-content row'>
-          <div className='home-content-trending col-sm-3'>
-            <Filter
-              data={createFilterObject()}
-              applyFilters={applyFilters}
-              clearAllFilters={clearAllFilters}
-            />
-          </div>
-          <div className='home-content-tweets col-sm-6'>
-            {(filterInProgress ? filteredTweetsData : tweetsData).map(
-              (item) => (
-                <div key={item.id}>
-                  <Tweet data={item} />
+        <MenuBar
+          enableSearch
+          hasTweets={tweetsData.length > 0}
+          searchFor={searchFor}
+          logout={logout}
+          getNewTweets={getNewTweets}
+        />
+        {tweetsData.length > 0 ? (
+          <div className='home-content row'>
+            <div className='home-content-trending col-sm-3'>
+              <Filter
+                data={createFilterObject()}
+                applyFilters={applyFilters}
+                clearAllFilters={clearAllFilters}
+              />
+            </div>
+            <div className='home-content-tweets col-sm-6'>
+              {(filterInProgress ? filteredTweetsData : tweetsData).map(
+                (item) => (
+                  <div key={item.id}>
+                    <Tweet data={item} />
+                  </div>
+                )
+              )}
+            </div>
+            {sortedUserData.length > 0 && (
+              <div className='home-content-stats col-sm-3'>
+                <div className='home-content-stats-title row'>
+                  <span className='home-content-stats-title-label'>
+                    Leader board
+                  </span>
                 </div>
-              )
+                {sortedUserData.map((userData) => (
+                  <div key={userData.screen_name}>
+                    <Card userData={userData} />
+                  </div>
+                ))}
+                <div className='home-content-trending'>
+                  <div className='home-content-stats-title row'>
+                    <span className='home-content-stats-title-label'>
+                      What's trending?
+                    </span>
+                  </div>
+                  <div className='home-content-stats-content'>
+                    <Table tableData={tableData} />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
-          <div className='home-content-stats col-sm-3'>
-            <div className='home-content-stats-title row'>
-              <span className='home-content-stats-title-label'>
-                Leader board
-              </span>
-            </div>
-            {sortedUserData.map((userData) => (
-              <div key={userData.screen_name}>
-                <Card userData={userData} />
-              </div>
-            ))}
-            <div className='home-content-trending'>
-              <div className='home-content-stats-title row'>
-                <span className='home-content-stats-title-label'>
-                  What's trending?
-                </span>
-              </div>
-              <div className='home-content-stats-content'>
-                <Table tableData={tableData} />
-              </div>
-            </div>
+        ) : (
+          <div className='home-content row'>
+            HHi
+            <ErrorComponent isPageLevel action={refreshPage} />
           </div>
-        </div>
+        )}
       </div>
       <Loader isLoading={isLoading} />
     </>

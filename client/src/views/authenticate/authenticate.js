@@ -19,6 +19,7 @@ function Authenticate() {
             'accessTokenData',
             JSON.stringify(response.data.resp)
           );
+          localStorage.setItem('successfulLogin', JSON.stringify(true));
           window.close();
         }
         return response;

@@ -8,6 +8,8 @@ function MenuBar(props) {
     logout = () => {},
     enableSearch = false,
     searchFor = () => {},
+    hasTweets,
+    getNewTweets = () => {},
   } = props;
   const [searchParam, setSearchParam] = useState('');
 
@@ -23,11 +25,15 @@ function MenuBar(props) {
         <Navbar.Brand href='/'>
           <img className='menu-content-logo' src={logo} alt='toplink logo' />
           <h2>TopLinks</h2>
+          {hasTweets && (
+            <Button variant='outline-primary' onClick={getNewTweets}>
+              Retrieve from twitter
+            </Button>
+          )}
         </Navbar.Brand>
-        {enableSearch && (
+        {enableSearch && hasTweets && (
           <Form inline>
             <FormControl type='text' placeholder='Search' onChange={onChange} />
-            <Button onClick={() => searchFor(searchParam)}>Search</Button>
           </Form>
         )}
         <Logout logout={logout} />

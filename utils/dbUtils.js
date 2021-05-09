@@ -4,7 +4,7 @@ const {
   constants: { DB_USERNAME, DB_PASSWORD },
 } = require('./constants');
 
-const uri = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.iyktc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority1`;
+const uri = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.iyktc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
