@@ -7,10 +7,11 @@ function Tweet(props) {
     user: { name, screen_name, location, profile_image_url },
     entities: { urls, hashtags },
     created_at,
+    id,
   } = data;
 
   return (
-    <div className='tweet'>
+    <div className='tweet' key={id}>
       <Card>
         <Card.Body>
           <div className='tweet-body row'>
@@ -32,7 +33,10 @@ function Tweet(props) {
             <div className='tweet-body-actions-hashtag-container'>
               {hashtags.length > 0
                 ? hashtags.map((hashtag) => (
-                    <span className='tweet-body-actions-hashtag-item'>
+                    <span
+                      className='tweet-body-actions-hashtag-item'
+                      key={hashtag.text}
+                    >
                       {`#${hashtag.text}`}
                     </span>
                   ))

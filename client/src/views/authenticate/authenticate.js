@@ -19,6 +19,7 @@ function Authenticate() {
             'accessTokenData',
             JSON.stringify(response.data.resp)
           );
+          localStorage.setItem('successfulLogin', JSON.stringify(true));
           window.close();
         }
         return response;
@@ -43,7 +44,7 @@ function Authenticate() {
     if (oauth_token && oauth_verifier) {
       accessTokenProcessing(oauth_token, oauth_verifier);
     } else {
-      window.href = '/';
+      window.location.href = '/login';
     }
   }, []);
   return <div className='authenticate row'></div>;

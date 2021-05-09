@@ -20,7 +20,7 @@ function Filter(props) {
     <div className='filter-container row'>
       <h3>Filters</h3>
       {props.data.map((filterItem) => (
-        <div className='filter-content'>
+        <div className='filter-content' key={filterItem.name}>
           <p className='filter-content-title'>{filterItem.name}</p>
           <div className='filter-content-options-container'>
             {Object.keys(filterItem.data).map((option) => (
@@ -31,6 +31,7 @@ function Filter(props) {
                     : ''
                 }`}
                 onClick={() => onOptionClick(filterItem.data[option].value)}
+                key={filterItem.data[option].value}
               >
                 {filterItem.data[option].value}
               </span>
