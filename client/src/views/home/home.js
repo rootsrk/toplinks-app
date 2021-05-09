@@ -80,8 +80,8 @@ function Home() {
         userLocationMap[location].tweets.push(i);
         userLocationMap[location].count++;
       } else {
-        userLocationMap[location] = {
-          value: location,
+        userLocationMap[location || 'None'] = {
+          value: location || 'None',
           tweets: [i],
           count: 0,
         };
