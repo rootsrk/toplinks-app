@@ -21,7 +21,8 @@ function Views() {
 
   const login = async () => {
     toggleLoader(true);
-    const response = post('/getToken').then((response) => {
+    const response = await post('/getToken').then((responseData) => {
+      const { response } = responseData;
       var win = window.open(
         `https://api.twitter.com/oauth/authenticate?oauth_token=${response.data.oauth_token}`,
         'Twitter oauth window'

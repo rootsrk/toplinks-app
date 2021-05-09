@@ -10,7 +10,7 @@ function Authenticate() {
 
     if (oauth_token && oauth_verifier) {
       try {
-        const response = post('/authenticateUser', {
+        const { response } = await post('/authenticateUser', {
           oauth_token,
           oauth_verifier,
         });

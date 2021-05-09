@@ -28,7 +28,6 @@ function Home() {
     return await post(`/getTweetsForUser?screen_name=${screen_name}`).then(
       (responseData) => {
         const { response } = responseData;
-        console.log(response);
         const {
           data: { records },
         } = response;
