@@ -39,7 +39,7 @@ function Home(props) {
       results: { screen_name },
     } = userData;
     let tweets = await callGetTweetsEndpoint(screen_name);
-    if (tweets.length === 0) {
+    if (!tweets) {
       getTweets(userData).then(async () => {
         tweets = await callGetTweetsEndpoint(screen_name);
       });
