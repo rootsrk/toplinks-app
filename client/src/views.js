@@ -9,6 +9,7 @@ import axios from 'axios';
 
 function Views() {
   const [isAuthenticated, setAuthenticated] = useState(false);
+  const [isLoading, toggleLoader] = useState(false);
 
   window.addEventListener(
     'storage',
@@ -19,6 +20,7 @@ function Views() {
   );
 
   const login = async () => {
+    toggleLoader(true);
     const response = await axios
       .post('/getToken', {})
       .then(function (response) {
@@ -38,6 +40,7 @@ function Views() {
 
   const onAuthenticationComplete = () => {
     setAuthenticated(true);
+    toggleLoader(false);
     window.location.href = '/home';
   };
 
@@ -72,7 +75,7 @@ function Views() {
           </Switch>
         </Router>
       </div>
-      <Loader />
+      {isLoading && <Loader />}
     </>
   );
 }

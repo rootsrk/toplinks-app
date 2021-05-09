@@ -5,6 +5,7 @@ import MenuBar from '../../components/menu/menu';
 import Tweet from '../../components/tweet/tweet';
 import Card from '../../components/card/card';
 import Filter from '../../components/filter/filter';
+import Loader from '../../components/loader/loader';
 import Table from '../../components/table/table';
 import { getTweets } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
@@ -20,6 +21,7 @@ function Home() {
   const [filterInProgress, toggleFilterInProgress] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState(false);
   const [tableData, setTableData] = useState(constants.tableData);
+  const [isLoading, toggleLoader] = useState(false);
 
   useEffect(() => {
     toggleFilterInProgress(appliedFilters.length > 0);
@@ -38,6 +40,7 @@ function Home() {
   };
 
   const getTweetsForUser = async (userData) => {
+    toggleLoader(true);
     const {
       results: { screen_name },
     } = userData;
@@ -48,6 +51,7 @@ function Home() {
       });
     }
     setTweets(tweets.filter(({ entities: { urls } }) => urls.length > 0));
+    toggleLoader(false);
   };
 
   const runAnalysisOnTweets = () => {
@@ -178,41 +182,48 @@ function Home() {
   }, []);
 
   return (
-    <div className='home'>
-      <MenuBar enableSearch searchFor={searchFor} />
-      <div className='home-content row'>
-        <div className='home-content-trending col-sm-3'>
-          <Filter
-            data={createFilterObject()}
-            applyFilters={applyFilters}
-            clearAllFilters={clearAllFilters}
-          />
-        </div>
-        <div className='home-content-tweets col-sm-6'>
-          {(filterInProgress ? filteredTweetsData : tweetsData).map((item) => (
-            <Tweet data={item} />
-          ))}
-        </div>
-        <div className='home-content-stats col-sm-3'>
-          <div className='home-content-stats-title row'>
-            <span className='home-content-stats-title-label'>Leader board</span>
+    <>
+      <div className='home'>
+        <MenuBar enableSearch searchFor={searchFor} />
+        <div className='home-content row'>
+          <div className='home-content-trending col-sm-3'>
+            <Filter
+              data={createFilterObject()}
+              applyFilters={applyFilters}
+              clearAllFilters={clearAllFilters}
+            />
           </div>
-          {sortedUserData.map((userData) => (
-            <Card userData={userData} />
-          ))}
-          <div className='home-content-trending'>
+          <div className='home-content-tweets col-sm-6'>
+            {(filterInProgress ? filteredTweetsData : tweetsData).map(
+              (item) => (
+                <Tweet data={item} />
+              )
+            )}
+          </div>
+          <div className='home-content-stats col-sm-3'>
             <div className='home-content-stats-title row'>
               <span className='home-content-stats-title-label'>
-                What's trending?
+                Leader board
               </span>
             </div>
-            <div className='home-content-stats-content'>
-              <Table tableData={tableData} />
+            {sortedUserData.map((userData) => (
+              <Card userData={userData} />
+            ))}
+            <div className='home-content-trending'>
+              <div className='home-content-stats-title row'>
+                <span className='home-content-stats-title-label'>
+                  What's trending?
+                </span>
+              </div>
+              <div className='home-content-stats-content'>
+                <Table tableData={tableData} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      {isLoading && <Loader />}
+    </>
   );
 }
 
