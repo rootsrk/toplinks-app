@@ -8,9 +8,7 @@ import Loader from '../../components/loader/loader';
 import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
-import { Redirect } from 'react-router-dom';
 function Home() {
-  const [isAuthenticated, setAuthenticated] = useState(false);
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
   const [screenName, setScreenName] = useState('');
@@ -29,15 +27,14 @@ function Home() {
   }, [appliedFilters]);
 
   const callGetTweetsEndpoint = async (screen_name) => {
-    return await post(`/getTweetsForUser?screen_name=${screen_name}`).then(
-      (responseData) => {
-        const { response } = responseData;
-        const { data = {} } = response;
-        const { records } = data;
-        const tweets = records ? records.tweets : null;
-        return tweets;
-      }
+    const responseData = await post(
+      `/getTweetsForUser?screen_name=${screen_name}`
     );
+    const { response } = responseData;
+    const { data = {} } = response;
+    const { records } = data;
+    const tweets = records ? records.tweets : null;
+    return tweets;
   };
 
   const getTweetsForUser = async (userData) => {
@@ -195,12 +192,10 @@ function Home() {
 
   const getNewTweets = async () => {
     toggleLoader(true);
-    let tweets = await getTweets(userData).then(async () => {
-      tweets = await callGetTweetsEndpoint(screenName);
+    await getTweets(userData).then(async () => {
+      let tweets = await callGetTweetsEndpoint(screenName);
+      storeTweets(tweets);
     });
-    setTweets(
-      (tweets || []).filter(({ entities: { urls } }) => urls.length > 0)
-    );
     toggleLoader(false);
   };
 
@@ -213,12 +208,11 @@ function Home() {
     const successfulLogin =
       JSON.parse(localStorage.getItem('successfulLogin')) || false;
     if (successfulLogin && userData) {
-      setAuthenticated(true);
       getTweetsForUser(userData);
     }
   }, []);
 
-  return isAuthenticated ? (
+  return (
     <>
       <div className='home'>
         <MenuBar
@@ -280,8 +274,6 @@ function Home() {
       </div>
       <Loader isLoading={isLoading} />
     </>
-  ) : (
-    <Redirect path='/login' />
   );
 }
 

@@ -22,11 +22,11 @@ function MenuBar(props) {
   return (
     <div className='menu-content'>
       <Navbar fixed='top'>
-        <Navbar.Brand href='/'>
+        <Navbar.Brand>
           <img className='menu-content-logo' src={logo} alt='toplink logo' />
           <h2>TopLinks</h2>
           {hasTweets && (
-            <Button variant='outline-primary' onClick={getNewTweets}>
+            <Button variant='outline-primary' onClick={() => getNewTweets()}>
               Retrieve from twitter
             </Button>
           )}
