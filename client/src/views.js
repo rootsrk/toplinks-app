@@ -75,7 +75,7 @@ function Views() {
           </Switch>
         </Router>
       </div>
-      {isLoading && <Loader />}
+      <Loader isLoading={isLoading} />
     </>
   );
 }

@@ -222,7 +222,7 @@ function Home() {
           </div>
         </div>
       </div>
-      {isLoading && <Loader />}
+      <Loader isLoading={isLoading} />
     </>
   );
 }
