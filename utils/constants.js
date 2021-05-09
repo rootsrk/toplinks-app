@@ -15,4 +15,4 @@ const constants = {
   DB_PASSWORD: process.env.DB_PASSWORD,
 };
 
-module.exports = constants;
+module.exports = { constants };
