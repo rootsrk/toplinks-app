@@ -1,5 +1,3 @@
-// import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import MenuBar from '../../components/menu/menu';
 import Tweet from '../../components/tweet/tweet';
@@ -7,9 +5,8 @@ import Card from '../../components/card/card';
 import Filter from '../../components/filter/filter';
 import Loader from '../../components/loader/loader';
 import Table from '../../components/table/table';
-import { getTweets } from '../../utils/serverMethods';
+import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
-import './home.scss';
 function Home() {
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
@@ -28,15 +25,17 @@ function Home() {
   }, [appliedFilters]);
 
   const callGetTweetsEndpoint = async (screen_name) => {
-    return await axios
-      .post(`/getTweetsForUser?screen_name=${screen_name}`)
-      .then((response) => {
+    return await post(`/getTweetsForUser?screen_name=${screen_name}`).then(
+      (responseData) => {
+        const { response } = responseData;
+        console.log(response);
         const {
           data: { records },
         } = response;
         const tweets = records ? records.tweets : null;
         return tweets;
-      });
+      }
+    );
   };
 
   const getTweetsForUser = async (userData) => {

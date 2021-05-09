@@ -1,5 +1,3 @@
-import './table.scss';
-
 function Table(props) {
   const {
     tableData: { headers, data },

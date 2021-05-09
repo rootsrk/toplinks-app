@@ -1,5 +1,4 @@
 import tweetLoader from '../../assets/loader.gif';
-import './loader.scss';
 
 function Loader(props) {
   return (

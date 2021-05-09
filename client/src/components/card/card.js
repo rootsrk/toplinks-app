@@ -1,5 +1,3 @@
-import './card.scss';
-
 function Card(props) {
   const { userData } = props;
   const { profile_image_url, count, name, screen_name } = userData;
