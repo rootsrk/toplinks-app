@@ -64,7 +64,7 @@ router.post('/getTweetsFromSource', async (req, res, next) => {
       await storeTweets({ screen_name, tweets, user_id });
     }
 
-    res.json({ tweets, err });
+    res.json({ tweets });
   } catch (err) {
     console.log(err);
     next(err);
