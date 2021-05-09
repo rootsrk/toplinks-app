@@ -9,6 +9,8 @@ const {
   checkConnection,
 } = require('./utils/dbUtils');
 
+const { getTweets } = require('./utils/twitterClient');
+
 let tokens = {};
 
 router.post('/getToken', async (req, res, next) => {
