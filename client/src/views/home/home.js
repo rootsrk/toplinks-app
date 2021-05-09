@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import MenuBar from '../../components/menu/menu';
 import Tweet from '../../components/tweet/tweet';
 import Card from '../../components/card/card';
-import ErrorComponent from '../../components/errorComponent/errorComponent';
 import Filter from '../../components/filter/filter';
 import Loader from '../../components/loader/loader';
 import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
-function Home() {
+import { Redirect } from 'react-router-dom';
+function Home(props) {
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
   const [screenName, setScreenName] = useState('');
@@ -222,55 +222,48 @@ function Home() {
           logout={logout}
           getNewTweets={getNewTweets}
         />
-        {tweetsData.length > 0 ? (
-          <div className='home-content row'>
-            <div className='home-content-trending col-sm-3'>
-              <Filter
-                data={createFilterObject()}
-                applyFilters={applyFilters}
-                clearAllFilters={clearAllFilters}
-              />
-            </div>
-            <div className='home-content-tweets col-sm-6'>
-              {(filterInProgress ? filteredTweetsData : tweetsData).map(
-                (item) => (
-                  <div key={item.id}>
-                    <Tweet data={item} />
-                  </div>
-                )
-              )}
-            </div>
-            {sortedUserData.length > 0 && (
-              <div className='home-content-stats col-sm-3'>
-                <div className='home-content-stats-title row'>
-                  <span className='home-content-stats-title-label'>
-                    Leader board
-                  </span>
+        <div className='home-content row'>
+          <div className='home-content-trending col-sm-3'>
+            <Filter
+              data={createFilterObject()}
+              applyFilters={applyFilters}
+              clearAllFilters={clearAllFilters}
+            />
+          </div>
+          <div className='home-content-tweets col-sm-6'>
+            {(filterInProgress ? filteredTweetsData : tweetsData).map(
+              (item) => (
+                <div key={item.id}>
+                  <Tweet data={item} />
                 </div>
-                {sortedUserData.map((userData) => (
-                  <div key={userData.screen_name}>
-                    <Card userData={userData} />
-                  </div>
-                ))}
-                <div className='home-content-trending'>
-                  <div className='home-content-stats-title row'>
-                    <span className='home-content-stats-title-label'>
-                      What's trending?
-                    </span>
-                  </div>
-                  <div className='home-content-stats-content'>
-                    <Table tableData={tableData} />
-                  </div>
-                </div>
-              </div>
+              )
             )}
           </div>
-        ) : (
-          <div className='home-content row'>
-            HHi
-            <ErrorComponent isPageLevel action={refreshPage} />
-          </div>
-        )}
+          {sortedUserData.length > 0 && (
+            <div className='home-content-stats col-sm-3'>
+              <div className='home-content-stats-title row'>
+                <span className='home-content-stats-title-label'>
+                  Leader board
+                </span>
+              </div>
+              {sortedUserData.map((userData) => (
+                <div key={userData.screen_name}>
+                  <Card userData={userData} />
+                </div>
+              ))}
+              <div className='home-content-trending'>
+                <div className='home-content-stats-title row'>
+                  <span className='home-content-stats-title-label'>
+                    What's trending?
+                  </span>
+                </div>
+                <div className='home-content-stats-content'>
+                  <Table tableData={tableData} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <Loader isLoading={isLoading} />
     </>

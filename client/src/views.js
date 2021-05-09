@@ -97,11 +97,11 @@ function Views() {
             </Route>
 
             <Route exact path='/home'>
-              <Home />
+              <Home isAuthenticated={isAuthenticated} />
             </Route>
 
-            <Route exact path='/'>
-              {isAuthenticated ? <Home /> : <Login loginToTwitter={login} />}
+            <Route path='/'>
+              <Error />
             </Route>
           </Switch>
         </Router>

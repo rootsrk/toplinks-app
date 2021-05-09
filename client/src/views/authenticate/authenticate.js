@@ -44,7 +44,7 @@ function Authenticate() {
     if (oauth_token && oauth_verifier) {
       accessTokenProcessing(oauth_token, oauth_verifier);
     } else {
-      window.href = '/';
+      window.location.href = '/login';
     }
   }, []);
   return <div className='authenticate row'></div>;

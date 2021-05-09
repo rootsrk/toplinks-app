@@ -4,7 +4,7 @@ import inactiveImage from '../../assets/inactive.jpg';
 import { Button } from 'react-bootstrap';
 
 function ErrorComponent(props) {
-  const { isPageLevel = false, action } = props;
+  const { isPageLevel = false, action, reRoute } = props;
   return isPageLevel ? (
     <div className='error-component row'>
       <div className='error-component-logo col-sm-6'>
@@ -29,13 +29,7 @@ function ErrorComponent(props) {
         <h4 className='error-component-content-desc'>
           Something broke. We are working on it.
         </h4>
-        <Button
-          className='primary'
-          onClick={() => {
-            debugger;
-            window.location = '/';
-          }}
-        >
+        <Button className='primary' onClick={() => reRoute()}>
           Go back home
         </Button>
       </div>
