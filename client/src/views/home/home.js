@@ -3,10 +3,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import MenuBar from '../../components/menu/menu';
 import Tweet from '../../components/tweet/tweet';
-import './home.scss';
-import { getTweets } from '../../utils/serverMethods';
+import Card from '../../components/card/card';
 import Filter from '../../components/filter/filter';
-function Home(props) {
+import Table from '../../components/table/table';
+import { getTweets } from '../../utils/serverMethods';
+import { sortObjectByKey, constants } from '../../utils/helper';
+import './home.scss';
+function Home() {
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
 
@@ -16,6 +19,7 @@ function Home(props) {
   const [userLocationData, setUserLocationData] = useState({});
   const [filterInProgress, toggleFilterInProgress] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState(false);
+  const [tableData, setTableData] = useState(constants.tableData);
 
   useEffect(() => {
     toggleFilterInProgress(appliedFilters.length > 0);
@@ -39,24 +43,12 @@ function Home(props) {
       results: { screen_name },
     } = userData;
     let tweets = await callGetTweetsEndpoint(screen_name);
-    if (tweets.length === 0) {
-      getTweets(userData).then(async () => {
+    if (!tweets) {
+      await getTweets(userData).then(async () => {
         tweets = await callGetTweetsEndpoint(screen_name);
       });
     }
     setTweets(tweets.filter(({ entities: { urls } }) => urls.length > 0));
-  };
-
-  const nestedSort = (sortKey, direction = 'asc') => (e1, e2) => {
-    const a = e1[sortKey],
-      b = e2[sortKey],
-      sortOrder = direction === 'asc' ? 1 : -1;
-    return a < b ? -sortOrder : a > b ? sortOrder : 0;
-  };
-
-  const sortObjectByKey = (input, key, order = 'desc') => {
-    const s = Object.entries(input).sort(nestedSort(key, order));
-    return s;
   };
 
   const runAnalysisOnTweets = () => {
@@ -119,6 +111,7 @@ function Home(props) {
         domainMap[domain] = {
           domain,
           counter: 1,
+          label: domain,
         };
       }
     });
@@ -129,10 +122,13 @@ function Home(props) {
     const sortedDomainMap = sortObjectByKey(domainMap, 'counter', 'asc').map(
       (item) => item[1]
     );
+    const modifiedTableData = { ...tableData };
+    modifiedTableData.data = sortedDomainData;
     setSortedUserData(sortedUserMap);
     setSortedDomainData(sortedDomainMap);
     setHashtagsMap(hashtagsMap);
     setUserLocationData(userLocationMap);
+    setTableData(modifiedTableData);
   };
 
   const createFilterObject = (allData = false) => {
@@ -203,22 +199,7 @@ function Home(props) {
             <span className='home-content-stats-title-label'>Leader board</span>
           </div>
           {sortedUserData.map((userData) => (
-            <div className='home-content-stats-content'>
-              <div className='home-content-stats-icon-container'>
-                <img
-                  className='home-content-stats-icon rounded-edges'
-                  src={userData.profile_image_url}
-                  alt='leader board icon'
-                />
-                <span className='home-content-stats-count'>
-                  {userData.count < 10 ? `0${userData.count}` : userData.count}
-                </span>
-              </div>
-              <div className='home-content-stats-content-label'>
-                <p>{userData.name}</p>
-                <span>{`@${userData.screen_name}`}</span>
-              </div>
-            </div>
+            <Card userData={userData} />
           ))}
           <div className='home-content-trending'>
             <div className='home-content-stats-title row'>
@@ -227,20 +208,7 @@ function Home(props) {
               </span>
             </div>
             <div className='home-content-stats-content'>
-              <table className='home-content-stats-content-table'>
-                <tr>
-                  <th>Rank</th>
-                  <th>Domain</th>
-                  <th>Hits</th>
-                </tr>
-                {sortedDomainData.map((domainData, index) => (
-                  <tr>
-                    <td>{index + 1}</td>
-                    <td>{domainData.domain}</td>
-                    <td>{domainData.counter}</td>
-                  </tr>
-                ))}
-              </table>
+              <Table tableData={tableData} />
             </div>
           </div>
         </div>
