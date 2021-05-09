@@ -6,7 +6,9 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const indexRouter = require('./routes');
 const { connectToDB } = require('./utils/dbUtils');
-const { port } = require('./utils/constants');
+const {
+  constants: { port },
+} = require('./utils/constants');
 
 const app = express();
 
