@@ -97,13 +97,12 @@ function Views() {
             </Route>
 
             <Route exact path='/home'>
-              {isAuthenticated ? <Home /> : <Redirect to='/login' />}
-              {/* {isAuthenticated ? <div>Home</div> : <div>Login</div>} */}
+              <Home isAuthenticated={isAuthenticated} />
             </Route>
 
-            {/* <Route exact path='/'>
+            <Route exact path='/'>
               {isAuthenticated ? <div>Home</div> : <div>Login</div>}
-            </Route> */}
+            </Route>
           </Switch>
         </Router>
       </div>
