@@ -8,6 +8,10 @@
 
 div {
   padding: 0;
+
+  &.card-body {
+    padding: 30px !important;
+  }
 }
 
 .col-sm-auto {
