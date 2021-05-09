@@ -21,7 +21,10 @@ function Filter(props) {
       <h3>Filters</h3>
       {props.data.map((filterItem) => (
         <div className='filter-content' key={filterItem.name}>
-          <p className='filter-content-title'>{filterItem.name}</p>
+          <div className='filter-content-container'>
+            <div className='filter-content-title'>{filterItem.name}</div>
+            <div>{filterItem.customComponent()}</div>
+          </div>
           <div className='filter-content-options-container'>
             {Object.keys(filterItem.data).map((option) => (
               <span

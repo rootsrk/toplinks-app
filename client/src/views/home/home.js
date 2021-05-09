@@ -8,6 +8,8 @@ import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
 import ErrorComponent from '../../components/errorComponent/errorComponent';
+import ModalComponent from '../../components/modal/modal';
+import { Button } from 'react-bootstrap';
 
 function Home(props) {
   const { setToastData } = props;
@@ -23,6 +25,7 @@ function Home(props) {
   const [appliedFilters, setAppliedFilters] = useState(false);
   const [tableData, setTableData] = useState(constants.tableData);
   const [isLoading, toggleLoader] = useState(false);
+  const [showModal, toggleModal] = useState(false);
 
   useEffect(() => {
     toggleFilterInProgress(appliedFilters.length > 0);
@@ -155,6 +158,19 @@ function Home(props) {
     setTableData(modifiedTableData);
   };
 
+  const renderCustomFilterComponent = () => {
+    return (
+      <Button
+        variant='outline-primary'
+        onClick={() => {
+          toggleModal(true);
+        }}
+      >
+        Choose from maps
+      </Button>
+    );
+  };
+
   const createFilterObject = (allData = false) => {
     if (allData) {
       return { ...hashtagsData, ...userLocationData };
@@ -164,11 +180,13 @@ function Home(props) {
         name: 'Hastags',
         id: 'hashtags',
         data: hashtagsData,
+        customComponent: () => {},
       },
       {
         name: 'Location',
         id: 'location',
         data: userLocationData,
+        customComponent: renderCustomFilterComponent,
       },
     ];
   };
@@ -283,6 +301,10 @@ function Home(props) {
                 </div>
               </div>
             )}
+            <ModalComponent
+              show={showModal}
+              handleClose={() => toggleModal(false)}
+            />
           </div>
         ) : (
           <ErrorComponent isPageLevel action={reload} />
