@@ -30,10 +30,9 @@ function Home() {
       .post(`/getTweetsForUser?screen_name=${screen_name}`)
       .then((response) => {
         const {
-          data: {
-            records: { tweets },
-          },
+          data: { records },
         } = response;
+        const tweets = records ? records.tweets : null;
         return tweets;
       });
   };
