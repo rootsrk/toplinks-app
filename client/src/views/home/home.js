@@ -215,7 +215,7 @@ function Home(props) {
     }
   }, []);
 
-  return isAuthenticated ? (
+  return (
     <>
       <div className='home'>
         <MenuBar
@@ -277,8 +277,6 @@ function Home(props) {
       </div>
       <Loader isLoading={isLoading} />
     </>
-  ) : (
-    <Redirect to='/login' />
   );
 }
 

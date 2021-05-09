@@ -36,7 +36,7 @@ function MenuBar(props) {
             <FormControl type='text' placeholder='Search' onChange={onChange} />
           </Form>
         )}
-        <Logout logout={logout} />
+        <Logout logout={() => logout()} />
       </Navbar>
     </div>
   );
