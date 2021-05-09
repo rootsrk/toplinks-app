@@ -101,7 +101,11 @@ function Views() {
             </Route>
 
             <Route exact path='/'>
-              {isAuthenticated ? <div>Home</div> : <div>Login</div>}
+              {isAuthenticated ? (
+                <Home isAuthenticated={isAuthenticated} />
+              ) : (
+                <Login loginToTwitter={login} />
+              )}
             </Route>
           </Switch>
         </Router>

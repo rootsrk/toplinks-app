@@ -8,7 +8,9 @@ import Loader from '../../components/loader/loader';
 import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
-function Home() {
+import { Redirect } from 'react-router-dom';
+function Home(props) {
+  const { isAuthenticated } = props;
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
   const [screenName, setScreenName] = useState('');
@@ -213,7 +215,7 @@ function Home() {
     }
   }, []);
 
-  return (
+  return isAuthenticated ? (
     <>
       <div className='home'>
         <MenuBar
@@ -275,6 +277,8 @@ function Home() {
       </div>
       <Loader isLoading={isLoading} />
     </>
+  ) : (
+    <Redirect to='/login' />
   );
 }
 
