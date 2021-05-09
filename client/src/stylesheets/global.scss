@@ -1,5 +1,25 @@
+@import './_variables.scss';
+
 .btn {
   &-primary {
-    background-color: #1c3b90 !important;
+    background-color: $base-blue !important;
   }
+}
+
+div {
+  padding: 0;
+
+  &.card-body {
+    padding: 30px !important;
+  }
+}
+
+.col-sm-auto {
+  padding: 0;
+}
+
+.row,
+.row > * {
+  margin: 0;
+  padding: 0;
 }

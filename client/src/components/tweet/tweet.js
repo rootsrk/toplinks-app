@@ -1,5 +1,4 @@
 import { Card, Button } from 'react-bootstrap';
-import './tweet.scss';
 
 function Tweet(props) {
   const { data } = props;

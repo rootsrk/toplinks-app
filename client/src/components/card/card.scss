@@ -1,0 +1,45 @@
+.custom-card {
+  display: flex;
+  justify-content: flex-start;
+  margin: 20px 0;
+  align-items: center;
+
+  &-icon {
+    max-height: 50px;
+    border: 1px solid;
+
+    &.rounded-edges {
+      border-radius: 50%;
+    }
+  }
+
+  &-count {
+    background-color: $base-red;
+    color: $base-white;
+    font-weight: bolder;
+    padding: 3px;
+    border-radius: 50%;
+    position: relative;
+    left: -15px;
+    top: -10px;
+  }
+
+  &-content {
+    display: flex;
+    justify-content: flex-start;
+    margin: 20px 0;
+    align-items: center;
+
+    &-label {
+      font-size: 20px;
+
+      span {
+        font-size: 14px;
+      }
+
+      p {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

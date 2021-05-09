@@ -5,10 +5,11 @@ import Error from './views/error/error';
 import Home from './views/home/home';
 import Authenticate from './views/authenticate/authenticate';
 import Loader from './components/loader/loader';
-import axios from 'axios';
+import { post } from './utils/serverMethods';
 
 function Views() {
   const [isAuthenticated, setAuthenticated] = useState(false);
+  const [isLoading, toggleLoader] = useState(false);
 
   window.addEventListener(
     'storage',
@@ -19,25 +20,26 @@ function Views() {
   );
 
   const login = async () => {
-    const response = await axios
-      .post('/getToken', {})
-      .then(function (response) {
-        var win = window.open(
-          `https://api.twitter.com/oauth/authenticate?oauth_token=${response.data.oauth_token}`,
-          'Twitter oauth window'
-        );
-        var timer = setInterval(function () {
-          if (win.closed) {
-            clearInterval(timer);
-          }
-        }, 500);
-        return response;
-      });
+    toggleLoader(true);
+    const response = await post('/getToken').then((responseData) => {
+      const { response } = responseData;
+      var win = window.open(
+        `https://api.twitter.com/oauth/authenticate?oauth_token=${response.data.oauth_token}`,
+        'Twitter oauth window'
+      );
+      var timer = setInterval(function () {
+        if (win.closed) {
+          clearInterval(timer);
+        }
+      }, 500);
+      return response;
+    });
     return response;
   };
 
   const onAuthenticationComplete = () => {
     setAuthenticated(true);
+    toggleLoader(false);
     window.location.href = '/home';
   };
 
@@ -72,7 +74,7 @@ function Views() {
           </Switch>
         </Router>
       </div>
-      <Loader />
+      <Loader isLoading={isLoading} />
     </>
   );
 }

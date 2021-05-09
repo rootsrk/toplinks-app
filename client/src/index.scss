@@ -1,11 +1,18 @@
 @import './stylesheets/global.scss';
 @import '~bootstrap/scss/bootstrap';
 
+@import './components/card/card.scss';
+@import './components/filter/filter.scss';
+@import './components/loader/loader.scss';
+@import './components/menu/menu.scss';
+@import './components/table/table.scss';
+@import './components/tweet/tweet.scss';
+
+@import './views/authenticate/authenticate.scss';
+@import './views/error/error.scss';
+@import './views/home/home.scss';
+@import './views/login/login.scss';
+
 * {
   overflow-x: hidden;
-}
-
-.row {
-  margin: 0;
-  padding: 0 10px;
 }

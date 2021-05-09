@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Navbar, Form, FormControl, Button } from 'react-bootstrap';
 import logo from '../../assets/logo.png';
-import './menu.scss';
 
 function MenuBar(props) {
   const [searchParam, setSearchParam] = useState('');

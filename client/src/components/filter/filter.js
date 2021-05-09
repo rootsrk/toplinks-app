@@ -1,6 +1,5 @@
 import { Button } from 'react-bootstrap';
 import { useState } from 'react';
-import './filter.scss';
 
 function Filter(props) {
   const [activeFilters, setActiveFilters] = useState([]);

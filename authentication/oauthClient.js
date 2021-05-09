@@ -1,27 +1,17 @@
 const oauthClient = require('oauth');
-
-const consumerKey = process.env.CONSUMER_KEY || 'g9YsqPUpaMIJKF4E4kLGLBMY1'; // 'g9YsqPUpaMIJKF4E4kLGLBMY1',
-const consumerSecret =
-  process.env.CONSUMER_SECRET ||
-  'FwoHc2plS0AX7lBrgCvw639MSqo5LqKYrXifRXIekhZgPXhWaS'; //'FwoHc2plS0AX7lBrgCvw639MSqo5LqKYrXifRXIekhZgPXhWaS',
-const requestTokenUrl = 'https://api.twitter.com/oauth/request_token';
-const accessTokenUrl = 'https://api.twitter.com/oauth/access_token';
-const oauthVersion = '1.0';
-const oauthCallbackUrl =
-  process.env.CALLBACK_URL || 'http://localhost:5000/authenticate';
-const method = 'HMAC-SHA1';
+const {
+  constants: {
+    requestTokenUrl,
+    accessTokenUrl,
+    consumerKey,
+    consumerSecret,
+    oauthVersion,
+    oauthCallbackUrl,
+    method,
+  },
+} = require('../utils/constants');
 
 const oauth = new oauthClient.OAuth(
-  requestTokenUrl,
-  accessTokenUrl,
-  consumerKey,
-  consumerSecret,
-  oauthVersion,
-  oauthCallbackUrl,
-  method
-);
-
-console.log(
   requestTokenUrl,
   accessTokenUrl,
   consumerKey,
@@ -37,8 +27,8 @@ const oauthMethods = {
       oauth.getOAuthRequestToken(
         (error, oauth_token, oauth_token_secret, results) => {
           if (error) {
-            console.log(error);
-            reject(error);
+            console.log('getOAuthRequestToken', error);
+            return error;
           } else {
             resolve({ oauth_token, oauth_token_secret, results });
           }
@@ -55,8 +45,8 @@ const oauthMethods = {
         oauth_verifier,
         (error, oauth_access_token, oauth_access_token_secret, results) => {
           if (error) {
-            console.log(error);
-            reject(error);
+            console.log('getOAuthAccessToken', error);
+            return error;
           } else {
             resolve({
               oauth_access_token,

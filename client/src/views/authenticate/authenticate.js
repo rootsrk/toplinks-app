@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import './authenticate.scss';
 import { useEffect } from 'react';
-import axios from 'axios';
-
-function Authenticate(props) {
+import { post } from '../../utils/serverMethods';
+function Authenticate() {
   const getAccessToken = async () => {
     const queryString = new URLSearchParams(window.location.search);
     const oauth_token = queryString.get('oauth_token');
@@ -11,11 +10,10 @@ function Authenticate(props) {
 
     if (oauth_token && oauth_verifier) {
       try {
-        const response = await axios
-          .post('/authenticateUser', { oauth_token, oauth_verifier })
-          .then((response) => {
-            return response;
-          });
+        const { response } = await post('/authenticateUser', {
+          oauth_token,
+          oauth_verifier,
+        });
         if (response) {
           localStorage.setItem(
             'accessTokenData',
