@@ -175,7 +175,7 @@ function Home(props) {
         sortObjectByKey(firstObject, secondObject, 'counter')
       )
       .reverse();
-    const modifiedTableData = { ...tableData };
+    const modifiedTableData = constants.tableData;
     modifiedTableData.data = sortedDomainData;
     setSortedUserData(sortedUserMap);
     setSortedDomainData(sortedDomainMap);
