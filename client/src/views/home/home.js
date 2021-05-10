@@ -23,7 +23,7 @@ function Home(props) {
   const [userLocationData, setUserLocationData] = useState({});
   const [filterInProgress, toggleFilterInProgress] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState(false);
-  const [tableData, setTableData] = useState(constants.tableData);
+  const [tableData, setTableData] = useState({});
   const [isLoading, toggleLoader] = useState(false);
 
   useEffect(() => {
@@ -175,8 +175,11 @@ function Home(props) {
         sortObjectByKey(firstObject, secondObject, 'counter')
       )
       .reverse();
-    const modifiedTableData = constants.tableData;
-    modifiedTableData.data = sortedDomainData;
+    const modifiedTableData = {
+      ...constants.tableData,
+      data: sortedDomainData,
+    };
+    console.log('>>', modifiedTableData);
     setSortedUserData(sortedUserMap);
     setSortedDomainData(sortedDomainMap);
     setHashtagsMap(hashtagsMap);
