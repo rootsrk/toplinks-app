@@ -24,13 +24,15 @@ const connectToDB = async () => {
   }
 };
 
-const storeTweets = async ({ screen_name, tweets, user_id }) => {
+const storeTweets = async ({ screen_name, tweets = [], user_id }) => {
   try {
-    await referencedCollection.findOneAndReplace(
-      { screen_name },
-      { screen_name, tweets, user_id },
-      { upsert: true }
-    );
+    if (tweets.length > 0) {
+      await referencedCollection.findOneAndReplace(
+        { screen_name },
+        { screen_name, tweets, user_id },
+        { upsert: true }
+      );
+    }
   } catch (err) {
     console.log(err);
   }

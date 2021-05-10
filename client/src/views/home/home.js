@@ -165,12 +165,16 @@ function Home(props) {
       }
     });
 
-    const sortedUserMap = sortObjectByKey(userMap, 'count', 'desc').map(
-      (item) => item[1]
-    );
-    const sortedDomainMap = sortObjectByKey(domainMap, 'counter', 'asc').map(
-      (item) => item[1]
-    );
+    const sortedUserMap = Object.values(userMap)
+      .sort((firstObject, secondObject) =>
+        sortObjectByKey(firstObject, secondObject, 'count')
+      )
+      .reverse();
+    const sortedDomainMap = Object.values(domainMap)
+      .sort((firstObject, secondObject) =>
+        sortObjectByKey(firstObject, secondObject, 'counter')
+      )
+      .reverse();
     const modifiedTableData = { ...tableData };
     modifiedTableData.data = sortedDomainData;
     setSortedUserData(sortedUserMap);
