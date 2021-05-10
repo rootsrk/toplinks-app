@@ -30,6 +30,8 @@ function Home(props) {
     toggleFilterInProgress(appliedFilters.length > 0);
   }, [appliedFilters]);
 
+  useEffect(() => {}, []);
+
   const callGetTweetsEndpoint = async (screen_name) => {
     const responseData = await post(
       `/getTweetsForUser?screen_name=${screen_name}`
@@ -59,7 +61,6 @@ function Home(props) {
       );
       setMapIDs(tweets.map((i) => i.id.toString()));
     }
-    console.log(tweets, isSelected);
     toggleFilterInProgress(true);
     setFilteredTweets(tweets);
   };
@@ -165,6 +166,12 @@ function Home(props) {
       }
     });
 
+    setHashtagsMap(hashtagsMap);
+    setUserLocationData(userLocationMap);
+    setSortedData(userMap, domainMap);
+  };
+
+  const setSortedData = (userMap, domainMap) => {
     const sortedUserMap = Object.values(userMap)
       .sort((firstObject, secondObject) =>
         sortObjectByKey(firstObject, secondObject, 'count')
@@ -177,14 +184,12 @@ function Home(props) {
       .reverse();
     const modifiedTableData = {
       ...constants.tableData,
-      data: sortedDomainData,
+      data: sortedDomainMap,
     };
-    console.log('>>', modifiedTableData, sortedDomainData, domainMap);
+    setTableData(modifiedTableData);
+
     setSortedUserData(sortedUserMap);
     setSortedDomainData(sortedDomainMap);
-    setHashtagsMap(hashtagsMap);
-    setUserLocationData(userLocationMap);
-    setTableData(modifiedTableData);
   };
 
   const renderCustomFilterComponent = () => {
