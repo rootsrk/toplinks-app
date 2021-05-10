@@ -179,7 +179,7 @@ function Home(props) {
       ...constants.tableData,
       data: sortedDomainData,
     };
-    console.log('>>', modifiedTableData);
+    console.log('>>', modifiedTableData, sortedDomainData);
     setSortedUserData(sortedUserMap);
     setSortedDomainData(sortedDomainMap);
     setHashtagsMap(hashtagsMap);
