@@ -23,7 +23,6 @@ function Filter(props) {
         <div className='filter-content' key={filterItem.name}>
           <div className='filter-content-container'>
             <div className='filter-content-title'>{filterItem.name}</div>
-            <div>{filterItem.customComponent()}</div>
           </div>
           <div className='filter-content-options-container'>
             {Object.keys(filterItem.data).map((option) => (
@@ -39,6 +38,9 @@ function Filter(props) {
                 {filterItem.data[option].value}
               </span>
             ))}
+          </div>
+          <div className='filter-content-custom'>
+            {filterItem.customComponent()}
           </div>
         </div>
       ))}

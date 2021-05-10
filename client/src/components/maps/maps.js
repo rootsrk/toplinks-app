@@ -1,19 +1,50 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
-import LocationMarker from './locationMarker/locationMarker';
+import { Map, Marker, ZoomControl } from 'pigeon-maps';
+import { useEffect, useState } from 'react';
+import './maps.scss';
 
 function Maps(props) {
+  const [myLocation, setMyLocation] = useState([12.9334373, 77.564861]);
+  const [tweets, setTweets] = useState([]);
+  const getCurrentPosition = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      setMyLocation([latitude, longitude]);
+    });
+  };
+
+  useEffect(() => {
+    const filteredTweets = (props.tweets || []).filter((item) => {
+      if (item.geo) {
+        return item;
+      }
+      return false;
+    });
+    getCurrentPosition();
+    setTweets(filteredTweets);
+  }, []);
+
   return (
-    <MapContainer
-      center={{ lat: 51.505, lng: -0.09 }}
-      zoom={13}
-      scrollWheelZoom={false}
-    >
-      <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      />
-      <LocationMarker />
-    </MapContainer>
+    <>
+      <Map height={300} center={myLocation} defaultZoom={11}>
+        <Marker width={50} color='blue' anchor={myLocation} />
+        {tweets.map((item) => (
+          <Marker
+            width={50}
+            color={
+              props.selectedMappedTweets.includes(item.id) ? 'blue' : 'black'
+            }
+            anchor={item.geo.coordinates}
+            onClick={() =>
+              props.onMarkerClick(
+                item,
+                props.selectedMappedTweets.includes(item.id)
+              )
+            }
+          />
+        ))}
+        <ZoomControl />
+      </Map>
+    </>
   );
 }
 

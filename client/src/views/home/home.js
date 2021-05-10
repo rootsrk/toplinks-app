@@ -4,17 +4,17 @@ import Tweet from '../../components/tweet/tweet';
 import Card from '../../components/card/card';
 import Filter from '../../components/filter/filter';
 import Loader from '../../components/loader/loader';
+import Maps from '../../components/maps/maps';
 import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
 import ErrorComponent from '../../components/errorComponent/errorComponent';
-import ModalComponent from '../../components/modal/modal';
-import { Button } from 'react-bootstrap';
 
 function Home(props) {
   const { setToastData } = props;
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
+  const [selectedMappedTweets, setMapIDs] = useState([]);
   const [screenName, setScreenName] = useState('');
   const [userData, setUserData] = useState('');
   const [sortedUserData, setSortedUserData] = useState([]);
@@ -25,7 +25,6 @@ function Home(props) {
   const [appliedFilters, setAppliedFilters] = useState(false);
   const [tableData, setTableData] = useState(constants.tableData);
   const [isLoading, toggleLoader] = useState(false);
-  const [showModal, toggleModal] = useState(false);
 
   useEffect(() => {
     toggleFilterInProgress(appliedFilters.length > 0);
@@ -40,6 +39,29 @@ function Home(props) {
     const { records } = data;
     const tweets = records ? records.tweets : null;
     return tweets;
+  };
+
+  const onMarkerClick = (tweet, isSelected) => {
+    let tweets;
+
+    if (!isSelected) {
+      const exists = tweetsData.filter((item) => {
+        if (item.id.toString() === tweet.id.toString()) return item;
+        return false;
+      });
+      if (exists.length > 0) {
+        tweets = [...new Set([...(filteredTweetsData || []), tweet])];
+        setMapIDs([...selectedMappedTweets, tweet.id.toString()]);
+      }
+    } else {
+      tweets = filteredTweetsData.filter(
+        (item) => item.id.toString() !== tweet.id.toString()
+      );
+      setMapIDs(tweets.map((i) => i.id.toString()));
+    }
+    console.log(tweets, isSelected);
+    toggleFilterInProgress(true);
+    setFilteredTweets(tweets);
   };
 
   const getTweetsForUser = async (userData) => {
@@ -160,14 +182,11 @@ function Home(props) {
 
   const renderCustomFilterComponent = () => {
     return (
-      <Button
-        variant='outline-primary'
-        onClick={() => {
-          toggleModal(true);
-        }}
-      >
-        Choose from maps
-      </Button>
+      <Maps
+        tweets={tweetsData}
+        onMarkerClick={onMarkerClick}
+        selectedMappedTweets={selectedMappedTweets}
+      />
     );
   };
 
@@ -301,10 +320,6 @@ function Home(props) {
                 </div>
               </div>
             )}
-            <ModalComponent
-              show={showModal}
-              handleClose={() => toggleModal(false)}
-            />
           </div>
         ) : (
           <ErrorComponent isPageLevel action={reload} />
