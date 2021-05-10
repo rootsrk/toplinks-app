@@ -10,6 +10,7 @@ function MenuBar(props) {
     searchFor = () => {},
     hasTweets,
     getNewTweets = () => {},
+    screenName,
   } = props;
   const [searchParam, setSearchParam] = useState('');
 
@@ -36,7 +37,7 @@ function MenuBar(props) {
             <FormControl type='text' placeholder='Search' onChange={onChange} />
           </Form>
         )}
-        <Logout logout={() => logout()} />
+        <Logout logout={() => logout()} screenName={screenName} />
       </Navbar>
     </div>
   );

@@ -272,11 +272,12 @@ function Home(props) {
     <>
       <div className='home'>
         <MenuBar
-          enableSearch
+          enableSearch={false}
           hasTweets={tweetsData.length > 0}
           searchFor={searchFor}
           logout={logout}
           getNewTweets={getNewTweets}
+          screenName={screenName}
         />
         {tweetsData.length > 0 ? (
           <div className='home-content row'>
