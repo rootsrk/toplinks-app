@@ -13,7 +13,7 @@ function Logout(props) {
           alt='twitter profile'
         />
         <div className='logout-content'>
-          <span className='logout-content-userhandle'>@sumo_dev_</span>
+          <span className='logout-content-userhandle'>{`@${props.screenName}`}</span>
           <span onClick={() => logout()} className='logout-content-button'>
             Logout
           </span>

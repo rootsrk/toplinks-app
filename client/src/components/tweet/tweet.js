@@ -29,8 +29,8 @@ function Tweet(props) {
             </div>
           </div>
           <Card.Text>{text}</Card.Text>
-          <div className='tweet-body-actions'>
-            <div className='tweet-body-actions-hashtag-container'>
+          <div className='tweet-body-actions row'>
+            <div className='tweet-body-actions-hashtag-container col-sm-9'>
               {hashtags.length > 0
                 ? hashtags.map((hashtag) => (
                     <span
@@ -44,6 +44,7 @@ function Tweet(props) {
             </div>
             <Button
               variant='primary'
+              className='col-sm-3'
               onClick={() => {
                 window.open(urls[0].expanded_url, '_blank');
               }}

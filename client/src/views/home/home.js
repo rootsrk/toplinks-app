@@ -4,6 +4,7 @@ import Tweet from '../../components/tweet/tweet';
 import Card from '../../components/card/card';
 import Filter from '../../components/filter/filter';
 import Loader from '../../components/loader/loader';
+import Maps from '../../components/maps/maps';
 import Table from '../../components/table/table';
 import { getTweets, post } from '../../utils/serverMethods';
 import { sortObjectByKey, constants } from '../../utils/helper';
@@ -13,6 +14,7 @@ function Home(props) {
   const { setToastData } = props;
   const [tweetsData, setTweets] = useState([]);
   const [filteredTweetsData, setFilteredTweets] = useState([]);
+  const [selectedMappedTweets, setMapIDs] = useState([]);
   const [screenName, setScreenName] = useState('');
   const [userData, setUserData] = useState('');
   const [sortedUserData, setSortedUserData] = useState([]);
@@ -21,12 +23,14 @@ function Home(props) {
   const [userLocationData, setUserLocationData] = useState({});
   const [filterInProgress, toggleFilterInProgress] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState(false);
-  const [tableData, setTableData] = useState(constants.tableData);
+  const [tableData, setTableData] = useState({});
   const [isLoading, toggleLoader] = useState(false);
 
   useEffect(() => {
     toggleFilterInProgress(appliedFilters.length > 0);
   }, [appliedFilters]);
+
+  useEffect(() => {}, []);
 
   const callGetTweetsEndpoint = async (screen_name) => {
     const responseData = await post(
@@ -37,6 +41,28 @@ function Home(props) {
     const { records } = data;
     const tweets = records ? records.tweets : null;
     return tweets;
+  };
+
+  const onMarkerClick = (tweet, isSelected) => {
+    let tweets;
+
+    if (!isSelected) {
+      const exists = tweetsData.filter((item) => {
+        if (item.id.toString() === tweet.id.toString()) return item;
+        return false;
+      });
+      if (exists.length > 0) {
+        tweets = [...new Set([...(filteredTweetsData || []), tweet])];
+        setMapIDs([...selectedMappedTweets, tweet.id.toString()]);
+      }
+    } else {
+      tweets = filteredTweetsData.filter(
+        (item) => item.id.toString() !== tweet.id.toString()
+      );
+      setMapIDs(tweets.map((i) => i.id.toString()));
+    }
+    toggleFilterInProgress(true);
+    setFilteredTweets(tweets);
   };
 
   const getTweetsForUser = async (userData) => {
@@ -140,19 +166,40 @@ function Home(props) {
       }
     });
 
-    const sortedUserMap = sortObjectByKey(userMap, 'count', 'desc').map(
-      (item) => item[1]
-    );
-    const sortedDomainMap = sortObjectByKey(domainMap, 'counter', 'asc').map(
-      (item) => item[1]
-    );
-    const modifiedTableData = { ...tableData };
-    modifiedTableData.data = sortedDomainData;
-    setSortedUserData(sortedUserMap);
-    setSortedDomainData(sortedDomainMap);
     setHashtagsMap(hashtagsMap);
     setUserLocationData(userLocationMap);
+    setSortedData(userMap, domainMap);
+  };
+
+  const setSortedData = (userMap, domainMap) => {
+    const sortedUserMap = Object.values(userMap)
+      .sort((firstObject, secondObject) =>
+        sortObjectByKey(firstObject, secondObject, 'count')
+      )
+      .reverse();
+    const sortedDomainMap = Object.values(domainMap)
+      .sort((firstObject, secondObject) =>
+        sortObjectByKey(firstObject, secondObject, 'counter')
+      )
+      .reverse();
+    const modifiedTableData = {
+      ...constants.tableData,
+      data: sortedDomainMap,
+    };
     setTableData(modifiedTableData);
+
+    setSortedUserData(sortedUserMap);
+    setSortedDomainData(sortedDomainMap);
+  };
+
+  const renderCustomFilterComponent = () => {
+    return (
+      <Maps
+        tweets={tweetsData}
+        onMarkerClick={onMarkerClick}
+        selectedMappedTweets={selectedMappedTweets}
+      />
+    );
   };
 
   const createFilterObject = (allData = false) => {
@@ -164,11 +211,13 @@ function Home(props) {
         name: 'Hastags',
         id: 'hashtags',
         data: hashtagsData,
+        customComponent: () => {},
       },
       {
         name: 'Location',
         id: 'location',
         data: userLocationData,
+        customComponent: renderCustomFilterComponent,
       },
     ];
   };
@@ -235,11 +284,12 @@ function Home(props) {
     <>
       <div className='home'>
         <MenuBar
-          enableSearch
+          enableSearch={false}
           hasTweets={tweetsData.length > 0}
           searchFor={searchFor}
           logout={logout}
           getNewTweets={getNewTweets}
+          screenName={screenName}
         />
         {tweetsData.length > 0 ? (
           <div className='home-content row'>
