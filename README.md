@@ -1,10 +1,10 @@
-# toplinks-app
+# Toplinks Application
 
 An app that shows the user of all the links and tweets mentioned on their home feed.
 
-Release updates:
+## Release updates:
 
-Must have features:
+### Must have features:
 
 - Use twitter as SSO login
 - Filter out the tweets received from twitter from the user's home timeline and display them on the page.
@@ -17,12 +17,16 @@ Must have features:
   - Search for tweets by hashtag
   - Filter tweets by location
 
-Implementation:
+### Future scope:
+
+- Create a draggable selector over the rendered maps
+- Search component for global search across all tweets
+
+### Implementation:
 
 The flow starts from login page. Once user logs in using twitter credentials, he/she is navigated to thhe home page.
 
 The user sees the following:
-
 - Tweets
 - Retrieve from twitter button that fetches the latest tweets
 - Filter panel for filtering via hashtags and logic
@@ -30,16 +34,16 @@ The user sees the following:
 - List of top domains that have been shared so far
 - A map marking the tweets with geo attribute having non null value
 
-Future scope:
 
-- Create a draggable selector over the rendered maps
-- Search component for global search across all tweets
 
-How to start the app:
+### How to start the app:
 
 The app contains a NodeJS Express server and react client.
 
-1. To run it in local, create an environment file and add all the variables.
+1. To run it in local, create an environment (`.env`) file and add all the variables.
 2. Install node modules on both root folder and the client folder.
-3. Go to the client folder. Create a react production build of the app by running npm run build.
-4. On the root directory, start the server by running npm start
+   - `npm install`
+   - `cd client`
+   - `npm install`
+4. Go to the client folder. Create a react production build of the app by running `npm run build`.
+5. On the root directory, start the server by running `npm start`
